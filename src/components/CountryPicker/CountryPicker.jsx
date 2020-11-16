@@ -8,15 +8,15 @@ import { fetchCountries } from '../../api';
 
 const CountryPicker = ({ handleCountryChange }) => {
   // Create a state array of countires we can select
-  const [fetchedCountries, setFetchedCountries] = useState([]);
+  const [countries, setCountries] = useState([]);
 
   useEffect(() => {
     const fetchAPI = async () => {
-      setFetchedCountries(await fetchCountries());
+      setCountries(await fetchCountries());
     }
 
     fetchAPI(); // get the list of countries we can select by bane
-  }, [setFetchedCountries]);
+  }, []);
 
   ////console.log("list of countries: ", fetchedCountries);
 
@@ -27,7 +27,7 @@ const CountryPicker = ({ handleCountryChange }) => {
     <FormControl className={ styles.formControl }>
       <NativeSelect defaultValue="" onChange={ (e) => handleCountryChange(e.target.value)}>
         <option value="">USA</option>
-        {fetchedCountries.map((country, i) => <option key={i} value={ country }>{ country }</option>)}
+        {countries.map((country, i) => <option key={i} value={country}>{country}</option>)}
       </NativeSelect>
     </FormControl>
   )

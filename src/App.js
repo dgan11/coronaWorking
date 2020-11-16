@@ -34,9 +34,9 @@ class App extends React.Component {
     ////console.log("data sending to Cards: ", data);
     return (
       <div className={styles.container}>
-        <img className={styles.image} src={coronaImage} alt="corona image"/>
-        <Cards data={data} />
-        <CountryPicker handleCountryChange={this.handleCountryChange}/>
+        <img className={styles.image} src={coronaImage} alt="corona image" />
+        <CountryPicker handleCountryChange={this.handleCountryChange} />
+        <Cards data={data} country={country} />
         <Chart data={data} country={country}/>
 
       </div>

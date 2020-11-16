@@ -3,7 +3,6 @@ import { fetchDailyData } from '../../api'; //import the fetchDailyData function
 import { Line, Bar } from 'react-chartjs-2'; // import line and bar chart
 
 import styles from './Chart.module.css'
-import { red } from '@material-ui/core/colors';
 
 const Chart = ({ data: { confirmed, deaths, recovered}, country}) => {
 
@@ -13,42 +12,76 @@ const Chart = ({ data: { confirmed, deaths, recovered}, country}) => {
   // useEffect method -- tell react that this component needs to do something after render
   useEffect(() => {
     // Di this in a seperate function bc async useEffect can cause data race issues
-    const fetchAPI = async () => {
+    const fetchMyAPI = async () => {
       setDailyData(await fetchDailyData());
     }
 
     ////console.log("DAILY DATA in CHART.js",dailyData);
 
     // Call the function to get the daily data and set state dailyData with the full data
-    fetchAPI();
+    fetchMyAPI();
   }, []); // only happens once
 
   // --- WE HAVE 2 DIFFERENT CHARTS so seperate ----
   //1. Line Chart
+  // const lineChart = (
+  //   dailyData.length
+  //     ? (
+  //       <Line
+  //         data={{
+  //           labels: dailyData.map(({ date }) => new Date(date).toLocaleDateString()),
+  //           datasets: [{
+  //             data: dailyData.map(({ confirmed }) => confirmed),
+  //             label: 'Infected',
+  //             borderColor: '#3333FF',
+  //             backgroundColor: 'rgba(0, 0, 255, 0.3)',
+  //             fill: true,
+  //           }, {
+  //             data: dailyData.map(({ deaths }) => deaths),
+  //             label: 'Deaths',
+  //             borderColor: 'rgba(255, 0, 0, 0.8)',
+  //             backgroundColor: 'rgba(255, 0, 0, 0.3)',
+  //             fill: true,
+  //         }]
+  //     }}
+  //   />) : null
+  // );
   const lineChart = (
-    dailyData.length
-      ? (
-        <Line
-          data={{
-            labels: dailyData.map(({date}) => date),
-            datasets: [{
-              data: dailyData.map(({ confirmed }) => confirmed),
-              label: 'Infected',
-              borderColor: '#3333FF',
-              backgroundColor: 'rgba(0, 0, 255, 0.3)',
-              fill: true,
-            }, {
-              data: dailyData.map(({ deaths }) => deaths),
-              label: 'Deaths',
-              borderColor: 'rgba(255, 0, 0, 0.8)',
-              backgroundColor: 'rgba(255, 0, 0, 0.3)',
-              fill: true,
-          }]
-      }}
-    />) : null
+    dailyData[0] ? (
+      <Line
+        data={{
+          labels: dailyData.map(({ date }) => new Date(date).toLocaleDateString()),
+          datasets: [{
+            data: dailyData.map((data) => data.confirmed),
+            label: 'Infected',
+            borderColor: '#3333ff',
+            fill: true,
+          }, {
+            data: dailyData.map((data) => data.deaths),
+            label: 'Deaths',
+            borderColor: 'red',
+            backgroundColor: 'rgba(255, 0, 0, 0.5)',
+            fill: true,
+          }, {
+            data: dailyData.map((data) => data.recovered),
+            label: 'Recovered',
+            borderColor: 'green',
+            backgroundColor: 'rgba(0, 255, 0, 0.5)',
+            fill: true,
+          },
+          ],
+        }}
+        options={{
+          //title: { display: true, text: `Total Number of Cases in the USA` },
+          responsive: true,
+          maintainAspectRatio: true,
+        }}
+      />
+    ) : null
   );
 
-  console.log(confirmed, recovered, deaths);
+
+  ////console.log(confirmed, recovered, deaths);
 
   //2. Bar Chart
   const barChart = (
